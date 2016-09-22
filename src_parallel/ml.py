@@ -14,25 +14,24 @@ from .io import read_nc_petsc
 #from netCDF4 import Dataset
 
 
-class qg_model():
+class ml_model():
     """ QG object
     """
     
     def __init__(self,
-                 hgrid = None, vgrid=None,
-                 N2 = 1e-3, f0 = 7e-5, K = 1.e2,
-                 f0N2_file = None,
-                 dt = 86400.e-1,
+                 hgrid = None,
+                 f0 = 7e-5, K = 1.e2,
+                 f0_file = None,
                  verbose = 1,
                  ):
-        """ QG object creation
+        """ ML object creation
         Parameters:
         """
 
         #
         # Build grid object
         #        
-        self.grid = grid(hgrid, vgrid) 
+        self.grid = grid(hgrid) 
 
         #
         # init petsc
@@ -43,8 +42,8 @@ class qg_model():
         # setup tiling
         #self.da = PETSc.DMDA().create([self.grid.Nx, self.grid.Ny, self.grid.Nz],
         #                              stencil_width=2)
-        self.da = PETSc.DMDA().create(sizes = [self.grid.Nx, self.grid.Ny, self.grid.Nz],
-                                      proc_sizes = [2,4,1],
+        self.da = PETSc.DMDA().create(sizes = [self.grid.Nx, self.grid.Ny],
+                                      proc_sizes = [2,4], dof=2,
                                       stencil_width = 2)
         # http://lists.mcs.anl.gov/pipermail/petsc-dev/2016-April/018889.html
         self.comm = self.da.getComm()
@@ -52,7 +51,7 @@ class qg_model():
         # print tiling information
         if self.rank is 0 and verbose>0:
             print 'PETSc DMDA created'
-            print 'The 3D grid is tiled according to (nproc_x, nproc_y, nproc_z) : '\
+            print 'The 2D grid is tiled according to (nproc_x, nproc_y) : '\
                     +str(self.da.proc_sizes) 
             #print 'rank='+str(self.rank)+' ranges='+str(self.da.ranges)
         
@@ -68,57 +67,43 @@ class qg_model():
         #
         if self._verbose>0:
             # general information
-            print 'A QG model object is being created'
+            print 'A ML model object is being created'
             # print out grid parameters
             print self.grid
 
         #
-        # vertical stratification and Coriolis
+        # Coriolis
         #
-        # N2 is at w points (cell faces), N2[i] is between q[i-1] and q[i]
-        if f0N2_file is not None:
+        if f0_file is not None:
             if self._verbose:
-                print 'Reads N2 from '+f0N2_file
+                print 'Reads f0 from '+f0_file
             #
-            self.N2 = read_nc('N2', f0N2_file)
-        else:
-            if self._verbose:
-                print 'Set N2 from user prescribed value = '+str(N2)+' 1/s^2'
-            #
-            self.N2 = N2*np.ones(self.grid.Nz+1)
-        #
-        if f0N2_file is not None:
-            if self._verbose:
-                print 'Reads f0 from '+f0N2_file
-            #
-            self.f0 = read_nc('f0', f0N2_file)
+            self.f0 = read_nc('f0', f0_file)
             #
             if self._verbose:
-                print 'Reads Coriolis parameter f from '+f0N2_file
-            self.grid.load_coriolis_parameter(f0N2_file, self.da, self.comm)
+                print 'Reads Coriolis parameter f from '+f0_file
+            self.grid.load_coriolis_parameter(f0_file, self.da, self.comm)
         else:
             self.f0 = f0
         #
-        self._sparam = self.f0**2/self.N2
         self.K = K
 
         #
         # declare petsc vectors
         #
-        # PV
-        self.Q = self.da.createGlobalVec()
-        # streamfunction
-        self.PSI = self.da.createGlobalVec()
-
+        
+        # wind vector
+        self.W = self.da.createGlobalVec()
+        # wind-driven current
+        self.U = self.da.createGlobalVec()
+        # background current
+        self.Ubar = self.da.createGlobalVec()
+        
         #
         # initiate pv inversion solver
         #
-        self.pvinv = pvinversion(self)
+        self.wdinv = wdinversion(self)
 
-        #
-        # initiate time stepper
-        #
-        self.tstepper = time_stepper(self, dt)
         
     
         
@@ -197,16 +182,10 @@ class qg_model():
                     q[i, j, k] = q[i-1,j,k]                
 
 
-    def invert_pv(self):
+    def solve_uv(self, omega=None):
         """ wrapper around solver solve method
         """
-        self.pvinv.solve(self.Q,self.PSI,self.da)
-
-
-    def tstep(self, nt=1):
-        """ Time step wrapper
-        """
-        self.tstepper.go(self, nt)
+        self.wdinv.solve(omega, self.W, self.U, self.da)
 
     
     def get_uv(self):

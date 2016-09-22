@@ -1,14 +1,13 @@
 
-This library implements a 3D z-level QG solver in regular grid or in lon/lat 
-grid.
-It relies on petsc4py for parallelized PV inversions but can also work in serial
-(not at the moment)
+This library solves the response a mixe layer to a time periodic wind on
+a spatially uniform horizontal grid
+It relies on petsc4py for parallelized inversion 
 
 Download and install with:
 ```
-git clone https://apatlpo@bitbucket.org/apatlpo/qgsolver.git
-cd qgsolver
-python setup.py
+git clone https://apatlpo@bitbucket.org/apatlpo/wd_solver.git
+cd wd_solver 
+python setup.py build_ext --inplace 
 ```
 
 
@@ -16,7 +15,6 @@ We use conda for the python install:
 ```
 bash
 source activate natl60
-export PYTHONPATH=$PYTHONPATH:/home/slyne/aponte/natl60/python/oocgcm/
 ```
 
 Proper conda install on Linux:

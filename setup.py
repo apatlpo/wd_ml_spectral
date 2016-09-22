@@ -15,24 +15,24 @@ from distutils.extension import Extension
 
 # ------
 # tests whether peptsc4py is installed and copy the proper source
-# directory as qgsolver/
+# directory as solver/
 
-_qgdir='./qgsolver'
+_wdsolver='./solver'
 # delete directory if existing
-if os.path.exists(_qgdir):
-    print 'Deletes existing '+_qgdir
-    shutil.rmtree(_qgdir)
+if os.path.exists(_wdsolver):
+    print 'Deletes existing '+_wdsolver
+    shutil.rmtree(_wdsolver)
 
 # test existence of petsc4
 try:
     import petsc4py
     #from petsc4py import version
     print 'petsc4py is available'
-    shutil.copytree('./src_parallel/',_qgdir)
+    shutil.copytree('./src_parallel/',_wdsolver)
 
 except:
     print 'petsc4py is not available, install serial code'
-    shutil.copytree('./src_serial/',_qgdir)
+    shutil.copytree('./src_serial/',_wdsolver)
     
 # ext_modules = [Extension('qgsolver.set_L_fast', 
 #                          sources=['qgsolver/set_L_fast.pyx'])]

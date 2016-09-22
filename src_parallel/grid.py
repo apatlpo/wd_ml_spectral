@@ -24,8 +24,8 @@ class grid(object):
         #
         # horizontal global grids
         #
-        hgrid_uniform_default = {'Lx':3.e2*1.e3, 'Ly':2e2*1.e3, 'H':4.e3, 
-                                 'Nx':150, 'Ny':100, 'Nz':10}
+        hgrid_uniform_default = {'Lx':3.e2*1.e3, 'Ly':2e2*1.e3, 
+                                 'Nx':150, 'Ny':100}
         self._flag_hgrid_uniform = False
         if hgrid is None or isinstance(hgrid,dict):
             # uniform grid
@@ -39,22 +39,7 @@ class grid(object):
         else:
             # curvilinear grid
             self._build_hgrid_curvilinear(hgrid)
-         
-        #   
-        # vertical grid
-        #
-        vgrid_uniform_default = {'H':4.e3, 'Nz':10}
-        self._flag_vgrid_uniform = False
-        if vgrid is None or isinstance(vgrid,dict):
-            self._flag_vgrid_uniform = True
-            #
-            vgrid_input = vgrid_uniform_default
-            for key, value in vgrid.items():
-                vgrid_input[key]=value
-            #
-            self._build_vgrid_uniform(**vgrid_input)
-        else:
-            self._build_vgrid_stretched(vgrid)
+
 
     #
     # Uniform grids
@@ -66,11 +51,6 @@ class grid(object):
         self.dx=self.Lx/(self.Nx-1.)
         self.dy=self.Ly/(self.Ny-1.)
         
-    def _build_vgrid_uniform(self, **kwargs):
-        for key, value in kwargs.items():
-            setattr(self, key, value)
-        # compute metric terms
-        self.dz=self.H/(self.Nz-1.)
     
     #
     # Curvilinear horizontal grid
@@ -119,19 +99,7 @@ class grid(object):
         #
         comm.barrier()
         pass
-    
-    #
-    # Vertically stretched grid
-    #
-    def _build_vgrid_stretched(self,vgrid_filename):
-        V = read_nc(['zc','zf'], vgrid_filename)
-        self.zc = V[0]
-        self.zf = V[1]
-        #
-        self.dzc = np.diff(self.zc)
-        self.dzf = np.diff(self.zf)
-        #
-        self.Nz = len(self.zc)
+
 
 
 #
@@ -153,18 +121,6 @@ class grid(object):
                 #+ '  min(dx) = %e , mean(dx) = %e, max(dx) = %e \n' % (np.min(self.dx), np.mean(self.dx), np.max(self.dx)) \
                 #+ '  min(dy) = %e , mean(dy) = %e, max(dy) = %e \n' % (np.min(self.dy), np.mean(self.dy), np.max(self.dy))
                 
-        if self._flag_hgrid_uniform:
-            out += 'The vertical grid is uniform with:\n' \
-                + '  Nz = %i' % (self.Nz) \
-                + ' , H = %e m' % (self.H) \
-                + ' , dz = %e \n' % (self.dz)
-        else:
-            out += 'The vertical grid is stretched with:\n' \
-                + '  Nz = %i' % (self.Nz) \
-                + '  min(dzf) = %e , mean(dzf) = %e, max(dzf) = %e \n' \
-                    % (np.min(self.dzf), np.mean(self.dzf), np.max(self.dzf)) \
-                + '  min(dzc) = %e , mean(dzc) = %e, max(dzc) = %e \n' \
-                    % (np.min(self.dzc), np.mean(self.dzc), np.max(self.dzc))    
         return out
       
                   
@@ -172,10 +128,6 @@ class grid(object):
 #==================== extract grid data ============================================
 #
 
-    def get_xyz(self):
-        x,y = self.get_xy()
-        z = self.get_z()
-        return x,y,z
                   
     def get_xy(self):
         if self._flag_hgrid_uniform:
@@ -186,12 +138,5 @@ class grid(object):
             y=np.arange(0., float(self.Ny))
         return x,y
 
-    def get_z(self):
-        if self._flag_vgrid_uniform:
-            z=np.linspace(0,self.H,self.Nz)
-        else:
-            z=self.zc
-        return z
-   
 
 
