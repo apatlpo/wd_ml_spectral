@@ -18,10 +18,10 @@ print('mpirun -np 8  python  '+script+'.py -mf -ksp_view -ksp_monitor -ksp_conve
 # on mac os
 print 'On mac os laptop'
 #os.system('mpirun-openmpi-gcc49 -np 8  python2.7  '+script+'.py  -mf -nx 10 -ny 10 -nz 4')
-print 'export PYTHONPATH=\"$PYTHONPATH:/Users/aponte/Current_projects/???/wd_solver/\";'
+print 'export PYTHONPATH=\"$PYTHONPATH:/Users/aponte/Current_projects/people/kraig_marine/wd_response/\";'
 #print('python2.7 setup.py')
 print('python2.7 setup.py build_ext --inplace')
-print('mpirun-openmpi-gcc49 -np 4  python2.7  ./dev/'+script+'.py  -mf -ksp_view -ksp_monitor -ksp_converged_reason')
+print('mpirun-openmpi-gcc49 -np 8  python2.7  '+script+'.py  -mf -ksp_view -ksp_monitor -ksp_converged_reason -log_view')
 
 # print 'All done'
 

@@ -99,7 +99,7 @@ class ml_model():
         self.U = self.da.createGlobalVec()
         # background current
         self.Ubar = self.da.createGlobalVec()
-
+        
         #
         # initiate pv inversion solver
         #
