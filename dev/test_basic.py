@@ -10,7 +10,6 @@ PV inversion of an analytical PV distribution
 from solver.ml import ml_model
 from solver.io import write_nc
 
-
 def uniform_grid_runs():
     ''' Tests with uniform grid, closed domains
     '''
@@ -18,9 +17,11 @@ def uniform_grid_runs():
                   K = 0.e0)
     #
     ml.set_wd()
+    #ml.set_U()
     ml.solve_uv(omega = 0.)
     #write_nc([ml.u, ml.v], ['u', 'v'], 'output.nc', ml)
     write_nc([ml.U], ['U'], 'output.nc', ml)
+    write_nc([ml.W], ['W'], 'output_wind.nc', ml)
     #
     
     return ml
