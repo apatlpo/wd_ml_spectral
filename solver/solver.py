@@ -6,13 +6,16 @@ import sys
 #import petsc4py
 #from petsc4py import PETSc
 
+#import petsc4py
+#petsc4py.init(args=sys.argv)
+
 import numpy as np
 
 #from .grid import *
 from .set_L import *
 
 #
-#==================== Serial solver ============================================
+#==================== Parallel solver ============================================
 #
 
 class wdinversion():
@@ -24,28 +27,31 @@ class wdinversion():
         """
                 
         self._verbose = ml._verbose
-                        
+
+        #
+        self.kx=ml.kx
+        self.ky=ml.ky
+
         # create the operator
         self.L = ml.da.createMat()
-        #self.I = ml.da.createMat()
         #
         if self._verbose>0:
             print 'Operator L declared'
 
         # Fill in operator values
         if ml.grid._flag_hgrid_uniform:
-            #print 'Check uniform grid' # passes
             set_L(self.L, ml)
         else:
             #set_L_curv(self.L, ml)
             pass
-            
         #
         if self._verbose>0:
             print 'Operator L filled'
+        if self._verbose > 1:
+            print self.L.norm()
 
         # global vector for solver
-        self._W = ml.da.createGlobalVec()
+        #self._W = ml.da.createGlobalVec()
 
         # local vectors
         #self._localQ  = qg.da.createLocalVec()
@@ -61,52 +67,42 @@ class wdinversion():
         self.ksp.setInitialGuessNonzero(True)
         # and incomplete Cholesky for preconditionning
         #self.ksp.getPC().setType('icc')
+        self.ksp.getPC().setType('none')
         # set tolerances
         #self.ksp.setTolerances(rtol=1e-10) # nope
         #
+        for opt in sys.argv[1:]:
+            PETSc.Options().setValue(opt, None)
         #PETSc.Options().setValue('-ksp_view', None)
         #PETSc.Options().setValue('-ksp_monitor', None)
         #PETSc.Options().setValue('-ksp_converged_reason', None)        
         self.ksp.setFromOptions()
+        #print self.ksp.getOptionsPrefix()
+        if self._verbose > 0:
+            print 'Solver is set up'
          
 
     def solve(self, omega, W, U, da):
         """ Compute the PV inversion
         """
-        # copy Q into Qinv
-        W.copy(self._W)
-        # fix boundaries
-        #self.set_qinv_bdy(da)
-        # add frequency component to operator:
+        ## copy W into _W
+        #W.copy(self._W)
+        ## add frequency component to operator:
         #self.ksp.setOperators(self.L.shift(-np.sqrt(-1)*omega))
-        # actually solves the pb
-        self.ksp.solve(self._W, U)
+        # reset PC
+        #self.ksp.getPC().setType('none')
+        ## actually solves the pb
+        #self.ksp.solve(self._W, U)
+        self.ksp.solve(W, U)
+        #
+        ## log info or debug
+        #print self.ksp.getConvergenceHistory()
+        #print self.ksp.getIterationNumber()
+        #print str(W.norm())+' / '+str(U.norm())
+        #self.ksp.solve(U, self._W)
         # tmp, test:
-        #self.L.mult(PSI, Q)
-        if self._verbose>1:
+        #self.L.mult(U, W)
+        #
+        if self._verbose>0:
             print 'Inversion done'
-
-
-    def set_qinv_bdy(self, da):
-        """ Set bdy in order to implement boundary conditions
-        Set q to 0 along boundaries for inversion, may be an issue
-        for time stepping
-        """ 
-        # 
-        q = da.getVecArray(self._Qinv)
-        mx, my, mz = da.getSizes()
-        (xs, xe), (ys, ye), (zs, ze) = da.getRanges()        
-        # bottom bdy
-        if (zs==0):
-            k=0
-            for j in range(ys, ye):
-                for i in range(xs, xe):
-                    q[i, j, k] = 0.
-        # upper bdy
-        if (ze==mz):
-            k=mz-1
-            for j in range(ys, ye):
-                for i in range(xs, xe):
-                    q[i, j, k] = 0.
-
 

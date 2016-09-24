@@ -4,9 +4,10 @@
 from .grid import *
 from .solver import *
 
-import petsc4py
+#import petsc4py
 #from Cython.Compiler.Main import verbose
-petsc4py.init(sys.argv)
+#petsc4py.init(args=sys.argv)
+#petsc4py.init(args=sys.argv[1:]) # does not seem to work
 from petsc4py import PETSc
 
 import numpy as np
@@ -36,15 +37,20 @@ class ml_model():
         #
         # init petsc
         #
-        
-        #OptDB = PETSc.Options()
+
+        #print sys.argv[1:]
+        #petsc4py.init(sys.argv[1:])
+        OptDB = PETSc.Options()
+        #for o in OptDB:
+        #    print o.prefix
+        #print OptDB.prefix
 
         # setup tiling
         #self.da = PETSc.DMDA().create([self.grid.Nx, self.grid.Ny, self.grid.Nz],
         #                              stencil_width=2)
         self.da = PETSc.DMDA().create(sizes = [self.grid.Nx, self.grid.Ny, 2],
                                       proc_sizes = [2,4,1], dof=1,
-                                      stencil_width = 2)
+                                      stencil_width = 1)
         # http://lists.mcs.anl.gov/pipermail/petsc-dev/2016-April/018889.html
         self.comm = self.da.getComm()
         self.rank = self.comm.getRank()
@@ -92,18 +98,23 @@ class ml_model():
         #
         # declare petsc vectors
         #
-        
+
+        # indexes along third dimension corresponding to x and y directions
+        self.kx=0; self.ky=1
+
         # wind vector
         self.W = self.da.createGlobalVec()
+        self.W.zeroEntries()
         # wind-driven current
         self.U = self.da.createGlobalVec()
+        self.U.zeroEntries()
         # background current
         self.Ubar = self.da.createGlobalVec()
-        
+
         #
         # initiate pv inversion solver
         #
-        self.wdinv = wdinversion(self)
+        self._wdinv = wdinversion(self)
 
 
     def set_wd(self, analytical_wd=True, file_wd=None):
@@ -126,66 +137,37 @@ class ml_model():
         w = self.da.getVecArray(self.W)
         mx, my, mz = self.da.getSizes()
         (xs, xe), (ys, ye), (zs, ze) = self.da.getRanges()
+        #print zs, ze
         #
         for j in range(ys, ye):
             for i in range(xs, xe):
                 # U component
-                w[i, j, 0] = 1.e0*np.exp(-((i/float(mx-1)-0.5)**2
-                                          + (j/float(my-1)-0.5)**2)/0.1**2)
+                w[i, j, self.kx] = 1.e0*np.exp(-((i/float(mx-1)-0.5)**2
+                                                 + (j/float(my-1)-0.5)**2)/0.1**2)
                 #w[i, j, 0] *= np.sin(i/float(mx-1)*np.pi)
                 #w[i, j, 0] *= np.sin(2*j/float(my-1)*np.pi)
                 # V component
-                w[i, j, 1] = 0.
+                w[i, j, self.ky] = 0.
+                #w[i, j, 2] = 0.
 
 
     def solve_uv(self, omega=None):
         """ wrapper around solver solve method
         """
-        self.wdinv.solve(omega, self.W, self.U, self.da)
+        self._wdinv.solve(omega, self.W, self.U, self.da)
 
 
-    #
-    # code below is not used for now
-    #
-
-
-    def set_q_bdy(self):
-        """ Reset q at boundaries such that dq/dn=0 """
-        #
-        q = self.da.getVecArray(self.Q)
-        #
+    def set_U(self):
+        """ Debug: set solution analytically
+        """
+        u = self.da.getVecArray(self.U)
         mx, my, mz = self.da.getSizes()
         (xs, xe), (ys, ye), (zs, ze) = self.da.getRanges()
         #
-        # south bdy
-        if (ys==0):
-            j=0
-            for k in range(zs, ze):
-                for i in range(xs, xe):
-                    q[i, j, k] = q[i,j+1,k]
-        # north bdy
-        if (ye==my):
-            j=my-1
-            for k in range(zs, ze):
-                for i in range(xs, xe):
-                    q[i, j, k] = q[i,j-1,k]
-        # west bdy
-        if (xs==0):
-            i=0
-            for k in range(zs, ze):
-                for j in range(ys, ye):
-                    q[i, j, k] = q[i+1,j,k]
-        # east bdy
-        if (xe==mx):
-            i=mx-1
-            for k in range(zs, ze):
-                for j in range(ys, ye):
-                    q[i, j, k] = q[i-1,j,k]                
-
-
-    def get_uv(self):
-        """ Compute horizontal velocities
-        """
-
-
+        for j in range(ys, ye):
+            for i in range(xs, xe):
+                # U component
+                u[i, j, self.ky] = 1.e0
+                # V component
+                u[i, j, self.kx] = 0.
 
