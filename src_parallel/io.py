@@ -26,6 +26,9 @@ def write_nc(V, vname, filename, ml, create=True):
         ### create a netcdf file to store QG pv for inversion
         rootgrp = Dataset(filename, 'w',
                           format='NETCDF4_CLASSIC', clobber=True)
+        # for complex support
+        #rootgrp = Dataset(filename, 'w',
+        #                  format='NETCDF4', clobber=True)
 
         # create dimensions
         rootgrp.createDimension('x', ml.grid.Nx)
@@ -34,26 +37,39 @@ def write_nc(V, vname, filename, ml, create=True):
         
         # create variables
         dtype='f8'
+        #complex128 = np.dtype([("real", np.float64), ("imag", np.float64)]) # create complex128 compound data type.
+        #dtype = rootgrp.createCompoundType(complex128, "complex128")
+        #
         nc_x = rootgrp.createVariable('x',dtype,('x'))
         nc_y = rootgrp.createVariable('y',dtype,('y'))
         nc_x[:], nc_y[:] = ml.grid.get_xy()
         # 2D variables but all are vectors
-        nc_Vx=[]
-        nc_Vy=[]
+        nc_Vx_real=[]
+        nc_Vx_imag=[]
+        nc_Vy_real=[]
+        nc_Vy_imag=[]
         for name in vname:
-            nc_Vx.append(rootgrp.createVariable(name+'x',dtype,('t','y','x',)))
-            nc_Vy.append(rootgrp.createVariable(name + 'y', dtype, ('t', 'y', 'x',)))
+            nc_Vx_real.append(rootgrp.createVariable(name+'x_r',dtype,('t','y','x',)))
+            nc_Vx_imag.append(rootgrp.createVariable(name+'x_i',dtype,('t','y','x',)))
+            nc_Vy_real.append(rootgrp.createVariable(name + 'y_r', dtype, ('t', 'y', 'x',)))
+            nc_Vy_imag.append(rootgrp.createVariable(name + 'y_i', dtype, ('t', 'y', 'x',)))
 
     elif rank == 0:
         ### open netcdf file
+        #rootgrp = Dataset(filename, 'a',
+        #                  format='NETCDF4_CLASSIC')
         rootgrp = Dataset(filename, 'a',
-                          format='NETCDF4_CLASSIC')
+                          format='NETCDF4')
         # 2D variables but all are vectors
-        nc_Vx=[]
-        nc_Vy=[]
+        nc_Vx_real=[]
+        nc_Vx_imag=[]
+        nc_Vy_real=[]
+        nc_Vy_imag=[]
         for name in vname:
-            nc_Vx.append(rootgrp.variables[name+'x'])
-            nc_Vy.append(rootgrp.variables[name+'y'])
+            nc_Vx_real.append(rootgrp.variables[name+'x_r'])
+            nc_Vx_imag.append(rootgrp.variables[name+'x_i'])
+            nc_Vy_real.append(rootgrp.variables[name+'y_r'])
+            nc_Vy_imag.append(rootgrp.variables[name+'y_i'])
 
 
     # loop around variables now and store them
@@ -65,12 +81,16 @@ def write_nc(V, vname, filename, ml, create=True):
         if rank == 0:
             Vf = Vn0[...].reshape(ml.da.sizes[::-1], order='c')
             if create:
-                nc_Vx[i][:] = Vf[np.newaxis,ml.kx,...]
-                nc_Vy[i][:] = Vf[np.newaxis,ml.ky,...]
+                nc_Vx_real[i][:] = Vf[np.newaxis,ml.kx,...].real
+                nc_Vx_imag[i][:] = Vf[np.newaxis,ml.kx,...].imag
+                nc_Vy_real[i][:] = Vf[np.newaxis,ml.ky,...].real
+                nc_Vy_imag[i][:] = Vf[np.newaxis,ml.ky,...].imag
             else:
                 if i==0: it=nc_Vx[i].shape[0]
-                nc_Vx[i][it,...] = Vf[ml.kx,:]
-                nc_Vy[i][it, ...] = Vf[ml.ky, :]
+                nc_Vx_real[i][it,...] = Vf[ml.kx,:].real
+                nc_Vx_imag[i][it,...] = Vf[ml.kx,:].imag
+                nc_Vy_real[i][it, ...] = Vf[ml.ky, :].real
+                nc_Vy_imag[i][it, ...] = Vf[ml.ky, :].imag
         ml.comm.barrier()
       
     if rank == 0:

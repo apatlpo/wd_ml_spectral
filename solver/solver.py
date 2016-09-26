@@ -68,6 +68,7 @@ class wdinversion():
         # and incomplete Cholesky for preconditionning
         #self.ksp.getPC().setType('icc')
         self.ksp.getPC().setType('none')
+        #self.ksp.getPC().setReusePreconditioner(True)
         # set tolerances
         #self.ksp.setTolerances(rtol=1e-10) # nope
         #
@@ -82,20 +83,25 @@ class wdinversion():
             print 'Solver is set up'
          
 
-    def solve(self, omega, W, U, da):
+    def solve(self, domega, W, U, da):
         """ Compute the PV inversion
         """
+        #
         ## copy W into _W
         #W.copy(self._W)
-        ## add frequency component to operator:
-        #self.ksp.setOperators(self.L.shift(-np.sqrt(-1)*omega))
-        # reset PC
-        #self.ksp.getPC().setType('none')
-        ## actually solves the pb
+        #
+        # add frequency component to operator:
+        #
+        self.L.shift(-domega*1j)
+        self.ksp.setOperators(self.L)
+        #
+        # actually solves the pb
+        #
         #self.ksp.solve(self._W, U)
         self.ksp.solve(W, U)
         #
-        ## log info or debug
+        # log info or debug
+        #
         #print self.ksp.getConvergenceHistory()
         #print self.ksp.getIterationNumber()
         #print str(W.norm())+' / '+str(U.norm())

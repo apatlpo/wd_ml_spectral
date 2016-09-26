@@ -18,7 +18,7 @@ def uniform_grid_runs():
     #
     ml.set_wd()
     #ml.set_U()
-    ml.solve_uv(omega = 0.)
+    ml.solve_uv(domega = 1.e-6)
     #write_nc([ml.u, ml.v], ['u', 'v'], 'output.nc', ml)
     write_nc([ml.U], ['U'], 'output.nc', ml)
     write_nc([ml.W], ['W'], 'output_wind.nc', ml)

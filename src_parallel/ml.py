@@ -45,6 +45,9 @@ class ml_model():
         #    print o.prefix
         #print OptDB.prefix
 
+        # test the complex build of PETSc
+        #print(PETSc.ScalarType)
+
         # setup tiling
         #self.da = PETSc.DMDA().create([self.grid.Nx, self.grid.Ny, self.grid.Nz],
         #                              stencil_width=2)
@@ -151,10 +154,10 @@ class ml_model():
                 #w[i, j, 2] = 0.
 
 
-    def solve_uv(self, omega=None):
+    def solve_uv(self, domega=None):
         """ wrapper around solver solve method
         """
-        self._wdinv.solve(omega, self.W, self.U, self.da)
+        self._wdinv.solve(domega, self.W, self.U, self.da)
 
 
     def set_U(self):
