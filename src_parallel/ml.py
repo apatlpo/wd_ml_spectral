@@ -21,7 +21,7 @@ class ml_model():
     
     def __init__(self,
                  hgrid = None,
-                 f0 = 7.e-5, K = 1.e2,
+                 f0 = 7.e-5, r = 1.e2,
                  f0_file = None,
                  verbose = 1,
                  ):
@@ -96,7 +96,7 @@ class ml_model():
         else:
             self.f0 = f0
         #
-        self.K = K
+        self.r = r
 
         #
         # declare petsc vectors
@@ -114,6 +114,8 @@ class ml_model():
         # background current
         self.Ubar = self.da.createGlobalVec()
 
+
+    def set_solver(self):
         #
         # initiate pv inversion solver
         #
@@ -140,19 +142,50 @@ class ml_model():
         w = self.da.getVecArray(self.W)
         mx, my, mz = self.da.getSizes()
         (xs, xe), (ys, ye), (zs, ze) = self.da.getRanges()
-        #print zs, ze
         #
         for j in range(ys, ye):
             for i in range(xs, xe):
                 # U component
-                w[i, j, self.kx] = 1.e0*np.exp(-((i/float(mx-1)-0.5)**2
-                                                 + (j/float(my-1)-0.5)**2)/0.1**2)
-                #w[i, j, 0] *= np.sin(i/float(mx-1)*np.pi)
+                #w[i, j, self.kx] = 1.e0*np.exp(-((i/float(mx-1)-0.5)**2
+                #                                 + (j/float(my-1)-0.5)**2)/0.1**2)
+                w[i, j, self.ky] = 1.e0
+                w[i, j, self.ky] *= np.sin(i/float(mx-1)*np.pi)**4
                 #w[i, j, 0] *= np.sin(2*j/float(my-1)*np.pi)
                 # V component
-                w[i, j, self.ky] = 0.
+                w[i, j, self.kx] = 0.
                 #w[i, j, 2] = 0.
 
+    def set_ubar(self, analytical_ubar=True, file_ubar=None):
+        """ Set q to a given value
+        """
+        #
+        if file_ubar is not None:
+            if self._verbose:
+                print 'Set background circulation from file ' + file_ubar + ' ...'
+                print 'But not implemented yet !!!!'
+                # read_nc_petsc(self.W, 'q', file_wd, self)
+        elif analytical_ubar:
+            if self._verbose:
+                print 'Set background circulation analytically '
+            self.set_ubar_analytically()
+
+    def set_ubar_analytically(self):
+        """ Set ubar analytically
+        """
+        u = self.da.getVecArray(self.Ubar)
+        mx, my, mz = self.da.getSizes()
+        (xs, xe), (ys, ye), (zs, ze) = self.da.getRanges()
+        #
+        for j in range(ys, ye):
+            for i in range(xs, xe):
+                # U component
+                u[i, j, self.kx] = 1.e-1 * np.exp(-((i / float(mx - 1) - 0.5) ** 2
+                                                    +(j / float(my - 1) - 0.5) ** 2) / 0.1 ** 2)
+                # u[i, j, 0] *= np.sin(i/float(mx-1)*np.pi)
+                # u[i, j, 0] *= np.sin(2*j/float(my-1)*np.pi)
+                # V component
+                u[i, j, self.ky] = 0.
+                # u[i, j, 2] = 0.
 
     def solve_uv(self, domega=None):
         """ wrapper around solver solve method

@@ -13,6 +13,9 @@ __pycache__/
 .pydevproject
 .settings/
 
+# pycharm file
+.idea/
+
 # data files
 *.nc
 

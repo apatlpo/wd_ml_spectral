@@ -86,7 +86,7 @@ def write_nc(V, vname, filename, ml, create=True):
                 nc_Vy_real[i][:] = Vf[np.newaxis,ml.ky,...].real
                 nc_Vy_imag[i][:] = Vf[np.newaxis,ml.ky,...].imag
             else:
-                if i==0: it=nc_Vx[i].shape[0]
+                if i==0: it=nc_Vx_real[i].shape[0]
                 nc_Vx_real[i][it,...] = Vf[ml.kx,:].real
                 nc_Vx_imag[i][it,...] = Vf[ml.kx,:].imag
                 nc_Vy_real[i][it, ...] = Vf[ml.ky, :].real

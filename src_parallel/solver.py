@@ -71,6 +71,7 @@ class wdinversion():
         #self.ksp.getPC().setReusePreconditioner(True)
         # set tolerances
         #self.ksp.setTolerances(rtol=1e-10) # nope
+        self.ksp.setTolerances(max_it=1000)
         #
         for opt in sys.argv[1:]:
             PETSc.Options().setValue(opt, None)

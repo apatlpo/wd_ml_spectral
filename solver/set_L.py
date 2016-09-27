@@ -18,6 +18,11 @@ def set_L(L, ml):
     #
     (xs, xe), (ys, ye), (zs, ze) = ml.da.getRanges()
     #
+    ### declare local vectors
+    local_Ubar = ml.da.createLocalVec()
+    ml.da.globalToLocal(ml.Ubar, local_Ubar)
+    ubar = ml.da.getVecArray(local_Ubar)
+    #
     L.zeroEntries()
     row = PETSc.Mat.Stencil()
     col = PETSc.Mat.Stencil()
@@ -35,14 +40,15 @@ def set_L(L, ml):
                 L.setValueStencil(row, row, 1.0)
             else: # interior points
                 for index, value in [
-                    ((i,j-1,kx), 0.), # U points
-                    ((i-1,j,kx), 0.),
-                    ((i, j, kx), 0.),
-                    ((i+1,j,kx), 0.),
-                    ((i,j+1,kx), 0.),
+                    ((i,j-1,kx), -ubar[i,j,ky] *idy *.5 ), # U points
+                    ((i-1,j,kx), -ubar[i,j,kx] *idx *.5 ),
+                    ((i, j, kx),  ml.r + (ubar[i+1,j, kx] - ubar[i-1,j,kx]) * idx * .5 ),
+                    ((i+1,j,kx),  ubar[i,j,kx] *idx *.5),
+                    ((i,j+1,kx),  ubar[i,j,ky] *idy *.5 ),
                     ((i,j-1,ky), 0.), # V points
                     ((i-1,j,ky), 0.),
-                    ((i, j, ky), -ml.f0),
+                    ((i, j, ky), -ml.f0 \
+                                + (ubar[i,j+1, kx] - ubar[i,j-1,kx]) * idy * .5),
                     ((i+1,j,ky), 0.),
                     ((i,j+1,ky), 0.)
                     ]:
@@ -62,14 +68,15 @@ def set_L(L, ml):
                 for index, value in [
                     ((i,j-1,kx), 0.), # U points
                     ((i-1,j,kx), 0.),
-                    ((i, j, kx), ml.f0),
+                    ((i, j, kx), ml.f0 + \
+                                  (ubar[i+1, j, ky] - ubar[i-1, j, ky]) * idx * .5),
                     ((i+1,j,kx), 0.),
                     ((i,j+1,kx), 0.),
-                    ((i,j-1,ky), 0.), # V points
-                    ((i-1,j,ky), 0.),
-                    ((i, j, ky), 0.),
-                    ((i+1,j,ky), 0.),
-                    ((i,j+1,ky), 0.)
+                    ((i,j-1,ky), -ubar[i,j,ky] *idy *.5), # V points
+                    ((i-1,j,ky), -ubar[i,j,kx] *idx *.5),
+                    ((i, j, ky), ml.r + (ubar[i,j+1, ky] - ubar[i+1,j,ky]) * idy * .5),
+                    ((i+1,j,ky),  ubar[i,j,kx] *idx *.5),
+                    ((i,j+1,ky),  ubar[i,j,ky] *idy *.5)
                     ]:
                     col.index = index
                     col.field = 0
