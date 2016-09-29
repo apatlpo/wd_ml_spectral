@@ -53,7 +53,7 @@ class ml_model():
         #                              stencil_width=2)
         self.da = PETSc.DMDA().create(sizes = [self.grid.Nx, self.grid.Ny, 2],
                                       proc_sizes = [2,4,1], dof=1,
-                                      stencil_width = 1)
+                                      stencil_width = 1, boundary_type='periodic')
         # http://lists.mcs.anl.gov/pipermail/petsc-dev/2016-April/018889.html
         self.comm = self.da.getComm()
         self.rank = self.comm.getRank()
@@ -148,8 +148,8 @@ class ml_model():
                 # U component
                 #w[i, j, self.kx] = 1.e0*np.exp(-((i/float(mx-1)-0.5)**2
                 #                                 + (j/float(my-1)-0.5)**2)/0.1**2)
-                w[i, j, self.ky] = 1.e0
-                w[i, j, self.ky] *= np.sin(i/float(mx-1)*np.pi)**4
+                w[i, j, self.ky] = 0.1 /1000. /50. # tau/rho0 /Hml
+                w[i, j, self.ky] *= np.sin(j/float(my-1)*np.pi)**4
                 #w[i, j, 0] *= np.sin(2*j/float(my-1)*np.pi)
                 # V component
                 w[i, j, self.kx] = 0.
@@ -175,16 +175,22 @@ class ml_model():
         u = self.da.getVecArray(self.Ubar)
         mx, my, mz = self.da.getSizes()
         (xs, xe), (ys, ye), (zs, ze) = self.da.getRanges()
+        Leddy = 1e5 #m
+        Ueddy = 0.2 #m/s
+        def psi(i,j): return Ueddy*Leddy \
+                          * np.exp(- (self.grid.get_dist_from_center(i, j) /Leddy)** 2)
         #
         for j in range(ys, ye):
             for i in range(xs, xe):
                 # U component
-                u[i, j, self.kx] = 1.e-1 * np.exp(-((i / float(mx - 1) - 0.5) ** 2
-                                                    +(j / float(my - 1) - 0.5) ** 2) / 0.1 ** 2)
+                u[i, j, self.kx] = -( psi(i,j+1)-psi(i,j-1))/self.grid.dy*0.5
+                #u[i, j, self.kx] = 1.e-1 * np.exp(-((i / float(mx - 1) - 0.5) ** 2
+                #                                    +(j / float(my - 1) - 0.5) ** 2) / 0.1 ** 2)
                 # u[i, j, 0] *= np.sin(i/float(mx-1)*np.pi)
                 # u[i, j, 0] *= np.sin(2*j/float(my-1)*np.pi)
                 # V component
-                u[i, j, self.ky] = 0.
+                u[i, j, self.ky] =  ( psi(i+1,j)-psi(i-1,j))/self.grid.dx*0.5
+                #u[i, j, self.ky] = 0.
                 # u[i, j, 2] = 0.
 
     def solve_uv(self, domega=None):

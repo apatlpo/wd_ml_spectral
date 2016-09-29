@@ -3,15 +3,16 @@
   <component name="ChangeListManager">
     <list default="true" id="da6a39af-19b7-4989-bbb9-be47787c648b" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/launch.py" afterPath="$PROJECT_DIR$/dev/launch.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dev/test_basic.py" afterPath="$PROJECT_DIR$/dev/test_basic.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/solver/grid.py" afterPath="$PROJECT_DIR$/solver/grid.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/solver/io.py" afterPath="$PROJECT_DIR$/solver/io.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/solver/ml.py" afterPath="$PROJECT_DIR$/solver/ml.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/solver/set_L.py" afterPath="$PROJECT_DIR$/solver/set_L.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/solver/solver.py" afterPath="$PROJECT_DIR$/solver/solver.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src_parallel/grid.py" afterPath="$PROJECT_DIR$/src_parallel/grid.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src_parallel/io.py" afterPath="$PROJECT_DIR$/src_parallel/io.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src_parallel/ml.py" afterPath="$PROJECT_DIR$/src_parallel/ml.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src_parallel/set_L.py" afterPath="$PROJECT_DIR$/src_parallel/set_L.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src_parallel/solver.py" afterPath="$PROJECT_DIR$/src_parallel/solver.py" />
     </list>
     <ignored path="wd_response.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -45,8 +46,8 @@
       <file leaf-file-name="test_basic.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dev/test_basic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="378">
-              <caret line="23" column="5" selection-start-line="23" selection-start-column="5" selection-end-line="23" selection-end-column="5" />
+            <state relative-caret-position="418">
+              <caret line="31" column="35" selection-start-line="31" selection-start-column="35" selection-end-line="31" selection-end-column="35" />
               <folding>
                 <element signature="e#187#217#0" expanded="true" />
               </folding>
@@ -54,11 +55,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ml.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ml.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src_parallel/ml.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="399">
-              <caret line="148" column="72" selection-start-line="148" selection-start-column="72" selection-end-line="148" selection-end-column="72" />
+            <state relative-caret-position="245">
+              <caret line="178" column="19" selection-start-line="178" selection-start-column="19" selection-end-line="178" selection-end-column="19" />
               <folding>
                 <element signature="e#44#63#0" expanded="true" />
               </folding>
@@ -66,21 +67,31 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="grid.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src_parallel/grid.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="435">
+              <caret line="147" column="40" selection-start-line="147" selection-start-column="8" selection-end-line="147" selection-end-column="40" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="solver.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src_parallel/solver.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="967">
+            <state relative-caret-position="1330">
               <caret line="70" column="54" selection-start-line="70" selection-start-column="54" selection-end-line="70" selection-end-column="54" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="set_L.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="set_L.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src_parallel/set_L.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="399">
-              <caret line="45" column="35" selection-start-line="45" selection-start-column="35" selection-end-line="45" selection-end-column="35" />
+            <state relative-caret-position="1235">
+              <caret line="65" column="20" selection-start-line="65" selection-start-column="20" selection-end-line="65" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -89,8 +100,8 @@
       <file leaf-file-name="io.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src_parallel/io.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="88" column="38" selection-start-line="88" selection-start-column="38" selection-end-line="88" selection-end-column="38" />
+            <state relative-caret-position="55">
+              <caret line="55" column="0" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
               <folding>
                 <element signature="e#44#70#0" expanded="true" />
               </folding>
@@ -106,21 +117,21 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src_parallel/grid.py" />
         <option value="$PROJECT_DIR$/dev/launch.py" />
         <option value="$PROJECT_DIR$/src_parallel/io_complex.py" />
         <option value="$PROJECT_DIR$/dev/io_complex.py" />
+        <option value="$PROJECT_DIR$/src_parallel/solver.py" />
         <option value="$PROJECT_DIR$/src_parallel/set_L.py" />
         <option value="$PROJECT_DIR$/src_parallel/io.py" />
-        <option value="$PROJECT_DIR$/src_parallel/solver.py" />
-        <option value="$PROJECT_DIR$/src_parallel/ml.py" />
+        <option value="$PROJECT_DIR$/src_parallel/grid.py" />
         <option value="$PROJECT_DIR$/dev/test_basic.py" />
+        <option value="$PROJECT_DIR$/src_parallel/ml.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="49" />
-    <option name="y" value="27" />
+    <option name="x" value="27" />
+    <option name="y" value="22" />
     <option name="width" value="1377" />
     <option name="height" value="840" />
   </component>
@@ -149,27 +160,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wd_response" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wd_response" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="wd_response" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scratches" />
       <pane id="Scope">
         <subPane subId="Project Files">
           <PATH>
@@ -208,6 +198,27 @@
             <PATH_ELEMENT USER_OBJECT="dev">
               <option name="myItemId" value="" />
               <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scratches" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wd_response" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wd_response" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wd_response" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -370,7 +381,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="49" y="27" width="1377" height="840" extended-state="0" />
+    <frame x="27" y="22" width="1377" height="840" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1954108" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -806,13 +817,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src_parallel/grid.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="21" column="35" selection-start-line="21" selection-start-column="35" selection-end-line="21" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src_parallel/io_complex.py" />
     <entry file="file://$PROJECT_DIR$/dev/io_complex.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -829,39 +833,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src_parallel/io.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="88" column="38" selection-start-line="88" selection-start-column="38" selection-end-line="88" selection-end-column="38" />
-          <folding>
-            <element signature="e#44#70#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src_parallel/ml.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="399">
-          <caret line="148" column="72" selection-start-line="148" selection-start-column="72" selection-end-line="148" selection-end-column="72" />
-          <folding>
-            <element signature="e#44#63#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dev/test_basic.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="23" column="5" selection-start-line="23" selection-start-column="5" selection-end-line="23" selection-end-column="5" />
-          <folding>
-            <element signature="e#187#217#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src_parallel/solver.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="967">
+        <state relative-caret-position="1330">
           <caret line="70" column="54" selection-start-line="70" selection-start-column="54" selection-end-line="70" selection-end-column="54" />
           <folding />
         </state>
@@ -869,9 +843,47 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src_parallel/set_L.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="399">
-          <caret line="45" column="35" selection-start-line="45" selection-start-column="35" selection-end-line="45" selection-end-column="35" />
+        <state relative-caret-position="1235">
+          <caret line="65" column="20" selection-start-line="65" selection-start-column="20" selection-end-line="65" selection-end-column="20" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src_parallel/io.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="55">
+          <caret line="55" column="0" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
+          <folding>
+            <element signature="e#44#70#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src_parallel/grid.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="147" column="40" selection-start-line="147" selection-start-column="8" selection-end-line="147" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dev/test_basic.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="31" column="35" selection-start-line="31" selection-start-column="35" selection-end-line="31" selection-end-column="35" />
+          <folding>
+            <element signature="e#187#217#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src_parallel/ml.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="245">
+          <caret line="178" column="19" selection-start-line="178" selection-start-column="19" selection-end-line="178" selection-end-column="19" />
+          <folding>
+            <element signature="e#44#63#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

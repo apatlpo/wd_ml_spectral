@@ -33,7 +33,7 @@ def write_nc(V, vname, filename, ml, create=True):
         # create dimensions
         rootgrp.createDimension('x', ml.grid.Nx)
         rootgrp.createDimension('y', ml.grid.Ny)
-        rootgrp.createDimension('t', None)
+        rootgrp.createDimension('omega', None)
         
         # create variables
         dtype='f8'
@@ -49,10 +49,10 @@ def write_nc(V, vname, filename, ml, create=True):
         nc_Vy_real=[]
         nc_Vy_imag=[]
         for name in vname:
-            nc_Vx_real.append(rootgrp.createVariable(name+'x_r',dtype,('t','y','x',)))
-            nc_Vx_imag.append(rootgrp.createVariable(name+'x_i',dtype,('t','y','x',)))
-            nc_Vy_real.append(rootgrp.createVariable(name + 'y_r', dtype, ('t', 'y', 'x',)))
-            nc_Vy_imag.append(rootgrp.createVariable(name + 'y_i', dtype, ('t', 'y', 'x',)))
+            nc_Vx_real.append(rootgrp.createVariable(name+'x_r',dtype,('omega','y','x',)))
+            nc_Vx_imag.append(rootgrp.createVariable(name+'x_i',dtype,('omega','y','x',)))
+            nc_Vy_real.append(rootgrp.createVariable(name + 'y_r', dtype, ('omega', 'y', 'x',)))
+            nc_Vy_imag.append(rootgrp.createVariable(name + 'y_i', dtype, ('omega', 'y', 'x',)))
 
     elif rank == 0:
         ### open netcdf file

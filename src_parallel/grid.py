@@ -139,4 +139,17 @@ class grid(object):
         return x,y
 
 
+    def get_xy_from_ij(self,i,j):
+        x = self.dx * i
+        y = self.dy * j
+        return x, y
+
+
+    def get_dist_from_center(self, i, j):
+        dx = self.dx * (i-self.Nx/2)
+        dy = self.dy * (j-self.Ny/2)
+        r = np.sqrt(dx**2+dy**2)
+        return r
+
+
 

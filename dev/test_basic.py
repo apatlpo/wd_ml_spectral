@@ -14,7 +14,7 @@ import numpy as np
 def uniform_grid_runs():
     ''' Tests with uniform grid, closed domains
     '''
-    ml = ml_model(hgrid = {'Nx':150, 'Ny':100},
+    ml = ml_model(hgrid = {'Nx':100, 'Ny':200, 'Lx':1.e6, 'Ly':2.e6},
                   r = 1.e-5)
     #
     ml.set_wd()
@@ -29,11 +29,11 @@ def uniform_grid_runs():
     #write_nc([ml.u, ml.v], ['u', 'v'], 'output.nc', ml)
     write_nc([ml.U], ['U'], 'output.nc', ml)
 
-    omega = 10**np.linspace(-5,-3,30)
+    omega = 10**np.linspace(-5,-3,200)
     domega = np.diff(omega)
-    for do in domega:
+    for dom in domega:
         print '\n'
-        ml.solve_uv(domega=do)
+        ml.solve_uv(domega=dom)
         write_nc([ml.U], ['U'], 'output.nc', ml, create=False)
 
     

@@ -34,8 +34,9 @@ def set_L(L, ml):
             #
             row.index = (i, j, kx)
             row.field = 0
-            if (i==0    or j==0 or
-                i==mx-1 or j==my-1):
+            #if (i==0    or j==0 or
+            #    i==mx-1 or j==my-1):
+            if False:
                 # U points
                 L.setValueStencil(row, row, 1.0)
             else: # interior points
@@ -60,8 +61,9 @@ def set_L(L, ml):
             #
             row.index = (i, j, ky)
             row.field = 0
-            if (i == 0 or j == 0 or
-                i == mx - 1 or j == my - 1):
+            #if (i == 0 or j == 0 or
+            #    i == mx - 1 or j == my - 1):
+            if False:
                 # V points
                 L.setValueStencil(row, row, 1.0)
             else: # interior points
