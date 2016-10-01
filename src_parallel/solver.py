@@ -70,8 +70,8 @@ class wdinversion():
         self.ksp.getPC().setType('none')
         #self.ksp.getPC().setReusePreconditioner(True)
         # set tolerances
-        #self.ksp.setTolerances(rtol=1e-10) # nope
-        self.ksp.setTolerances(max_it=1000)
+        #self.ksp.setTolerances(rtol=1e-10)
+        #self.ksp.setTolerances(max_it=1000)
         #
         for opt in sys.argv[1:]:
             PETSc.Options().setValue(opt, None)
@@ -111,5 +111,5 @@ class wdinversion():
         #self.L.mult(U, W)
         #
         if self._verbose>0:
-            print 'Inversion done'
+            print ' ... Inversion done'
 

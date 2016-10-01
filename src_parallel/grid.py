@@ -129,20 +129,24 @@ class grid(object):
 #
 
                   
-    def get_xy(self):
-        if self._flag_hgrid_uniform:
-            x=np.linspace(0,self.Lx,self.Nx)
-            y=np.linspace(0,self.Ly,self.Ny)
+    def get_xy(self, i=None, j=None):
+        if i==None and j==None:
+            if self._flag_hgrid_uniform:
+                x=np.linspace(0,self.Lx,self.Nx)
+                y=np.linspace(0,self.Ly,self.Ny)
+            else:
+                x=np.arange(0., float(self.Nx))
+                y=np.arange(0., float(self.Ny))
         else:
-            x=np.arange(0., float(self.Nx))
-            y=np.arange(0., float(self.Ny))
+            x = i * self.dx
+            y = j * self.dy
         return x,y
 
 
-    def get_xy_from_ij(self,i,j):
-        x = self.dx * i
-        y = self.dy * j
-        return x, y
+    #def get_xy_from_ij(self,i,j):
+    #    x = self.dx * i
+    #    y = self.dy * j
+    #    return x, y
 
 
     def get_dist_from_center(self, i, j):

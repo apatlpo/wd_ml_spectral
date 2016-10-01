@@ -42,6 +42,7 @@ def write_nc(V, vname, filename, ml, create=True):
         #
         nc_x = rootgrp.createVariable('x',dtype,('x'))
         nc_y = rootgrp.createVariable('y',dtype,('y'))
+        nc_omega = rootgrp.createVariable('omega',dtype,('omega'))
         nc_x[:], nc_y[:] = ml.grid.get_xy()
         # 2D variables but all are vectors
         nc_Vx_real=[]
@@ -70,7 +71,7 @@ def write_nc(V, vname, filename, ml, create=True):
             nc_Vx_imag.append(rootgrp.variables[name+'x_i'])
             nc_Vy_real.append(rootgrp.variables[name+'y_r'])
             nc_Vy_imag.append(rootgrp.variables[name+'y_i'])
-
+        nc_omega = rootgrp.variables['omega']
 
     # loop around variables now and store them
     Vn = ml.da.createNaturalVec()
@@ -81,12 +82,14 @@ def write_nc(V, vname, filename, ml, create=True):
         if rank == 0:
             Vf = Vn0[...].reshape(ml.da.sizes[::-1], order='c')
             if create:
+                nc_omega[0] = ml.omega
                 nc_Vx_real[i][:] = Vf[np.newaxis,ml.kx,...].real
                 nc_Vx_imag[i][:] = Vf[np.newaxis,ml.kx,...].imag
                 nc_Vy_real[i][:] = Vf[np.newaxis,ml.ky,...].real
                 nc_Vy_imag[i][:] = Vf[np.newaxis,ml.ky,...].imag
             else:
                 if i==0: it=nc_Vx_real[i].shape[0]
+                nc_omega[it] = ml.omega
                 nc_Vx_real[i][it,...] = Vf[ml.kx,:].real
                 nc_Vx_imag[i][it,...] = Vf[ml.kx,:].imag
                 nc_Vy_real[i][it, ...] = Vf[ml.ky, :].real

@@ -64,10 +64,6 @@ class ml_model():
                     +str(self.da.proc_sizes)
             # Note that the grid is 3D in fact (third dimension describes vectors)
             #print 'rank='+str(self.rank)+' ranges='+str(self.da.ranges)
-        
-        # for lon/lat grids should load metric terms over tiles
-        if not self.grid._flag_hgrid_uniform:
-            self.grid.load_metric_terms(self.da, self.comm)
 
         # print out grid information
         if self.rank is 0 and verbose>0:
@@ -97,6 +93,9 @@ class ml_model():
             self.f0 = f0
         #
         self.r = r
+
+        # initiate frequency
+        self.omega=0.
 
         #
         # declare petsc vectors
@@ -155,7 +154,7 @@ class ml_model():
                 w[i, j, self.kx] = 0.
                 #w[i, j, 2] = 0.
 
-    def set_ubar(self, analytical_ubar=True, file_ubar=None):
+    def set_ubar(self, analytical_ubar=0, file_ubar=None):
         """ Set q to a given value
         """
         #
@@ -164,21 +163,33 @@ class ml_model():
                 print 'Set background circulation from file ' + file_ubar + ' ...'
                 print 'But not implemented yet !!!!'
                 # read_nc_petsc(self.W, 'q', file_wd, self)
-        elif analytical_ubar:
+        else:
             if self._verbose:
                 print 'Set background circulation analytically '
-            self.set_ubar_analytically()
+            self.set_ubar_analytically(analytical_ubar)
 
-    def set_ubar_analytically(self):
+    def set_ubar_analytically(self, analytical_ubar=1):
         """ Set ubar analytically
         """
         u = self.da.getVecArray(self.Ubar)
         mx, my, mz = self.da.getSizes()
         (xs, xe), (ys, ye), (zs, ze) = self.da.getRanges()
-        Leddy = 1e5 #m
-        Ueddy = 0.2 #m/s
-        def psi(i,j): return Ueddy*Leddy \
-                          * np.exp(- (self.grid.get_dist_from_center(i, j) /Leddy)** 2)
+        if analytical_ubar == 1:
+            Leddy = 1e5  # m
+            Ueddy = 0.2  # m/s
+            def psi(i,j): return Ueddy*Leddy \
+                      * np.exp(- (self.grid.get_dist_from_center(i, j) /Leddy)** 2)
+        elif analytical_ubar == 2:
+            Leddy = 1e5  # m
+            Ueddy = 0.2  # m/s
+            keddy = 2.*np.pi/Leddy
+            def psi(i, j):
+                return Ueddy * Leddy \
+                       * np.sin(keddy*i*self.grid.dx) \
+                       * np.sin(keddy*j*self.grid.dy)
+        else:
+            if self._verbose: print 'Background flow is 0'
+            def psi(i, j): return 0.
         #
         for j in range(ys, ye):
             for i in range(xs, xe):
@@ -197,7 +208,7 @@ class ml_model():
         """ wrapper around solver solve method
         """
         self._wdinv.solve(domega, self.W, self.U, self.da)
-
+        self.omega+=domega
 
     def set_U(self):
         """ Debug: set solution analytically
