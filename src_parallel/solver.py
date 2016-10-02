@@ -104,7 +104,7 @@ class wdinversion():
         # log info or debug
         #
         #print self.ksp.getConvergenceHistory()
-        #print self.ksp.getIterationNumber()
+        if self._verbose: print '  iteration # = '+str(self.ksp.getIterationNumber())
         #print str(W.norm())+' / '+str(U.norm())
         #self.ksp.solve(U, self._W)
         # tmp, test:

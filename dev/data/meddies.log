@@ -1,0 +1,208 @@
+PETSc DMDA created
+The 2D grid is tiled according to (nproc_x, nproc_y) : (2, 4, 1)
+A ML model object is being created
+The horizontal grid is uniform with:
+  Nx = 100 , Ny = 200 
+  Lx = 1.000000e+03 km , Ly = 2.000000e+03 km 
+  dx = 1.010101e+04 , dy = 1.005025e+04 
+
+Set wind analytically 
+Set background circulation analytically 
+Operator L declared
+Operator L filled
+Solver is set up
+  iteration # = 16
+ ... Inversion done
+-- omega = 1.2e-06
+  iteration # = 6
+ ... Inversion done
+-- omega = 1.5e-06
+  iteration # = 6
+ ... Inversion done
+-- omega = 1.7e-06
+  iteration # = 8
+ ... Inversion done
+-- omega = 2.0e-06
+  iteration # = 6
+ ... Inversion done
+-- omega = 2.2e-06
+  iteration # = 6
+ ... Inversion done
+-- omega = 2.5e-06
+  iteration # = 6
+ ... Inversion done
+-- omega = 2.8e-06
+  iteration # = 8
+ ... Inversion done
+-- omega = 3.0e-06
+  iteration # = 6
+ ... Inversion done
+-- omega = 3.3e-06
+  iteration # = 6
+ ... Inversion done
+-- omega = 3.6e-06
+  iteration # = 6
+ ... Inversion done
+-- omega = 3.9e-06
+  iteration # = 8
+ ... Inversion done
+-- omega = 4.2e-06
+  iteration # = 6
+ ... Inversion done
+-- omega = 4.5e-06
+  iteration # = 6
+ ... Inversion done
+-- omega = 4.8e-06
+  iteration # = 6
+ ... Inversion done
+-- omega = 5.1e-06
+  iteration # = 8
+ ... Inversion done
+-- omega = 5.5e-06
+  iteration # = 6
+ ... Inversion done
+-- omega = 5.8e-06
+  iteration # = 6
+ ... Inversion done
+-- omega = 6.2e-06
+  iteration # = 8
+ ... Inversion done
+-- omega = 6.5e-06
+  iteration # = 6
+ ... Inversion done
+-- omega = 6.9e-06
+  iteration # = 8
+ ... Inversion done
+-- omega = 7.3e-06
+  iteration # = 6
+ ... Inversion done
+-- omega = 7.6e-06
+  iteration # = 8
+ ... Inversion done
+-- omega = 8.0e-06
+  iteration # = 8
+ ... Inversion done
+-- omega = 8.4e-06
+  iteration # = 8
+ ... Inversion done
+-- omega = 8.8e-06
+  iteration # = 8
+ ... Inversion done
+-- omega = 9.3e-06
+  iteration # = 8
+ ... Inversion done
+-- omega = 9.7e-06
+  iteration # = 8
+ ... Inversion done
+-- omega = 1.0e-05
+  iteration # = 8
+ ... Inversion done
+-- omega = 1.1e-05
+  iteration # = 8
+ ... Inversion done
+-- omega = 1.1e-05
+  iteration # = 8
+ ... Inversion done
+-- omega = 1.1e-05
+  iteration # = 8
+ ... Inversion done
+-- omega = 1.2e-05
+  iteration # = 8
+ ... Inversion done
+-- omega = 1.2e-05
+  iteration # = 8
+ ... Inversion done
+-- omega = 1.3e-05
+  iteration # = 8
+ ... Inversion done
+-- omega = 1.3e-05
+  iteration # = 8
+ ... Inversion done
+-- omega = 1.4e-05
+  iteration # = 8
+ ... Inversion done
+-- omega = 1.5e-05
+  iteration # = 8
+ ... Inversion done
+-- omega = 1.5e-05
+  iteration # = 8
+ ... Inversion done
+-- omega = 1.6e-05
+  iteration # = 8
+ ... Inversion done
+-- omega = 1.6e-05
+  iteration # = 8
+ ... Inversion done
+-- omega = 1.7e-05
+  iteration # = 8
+ ... Inversion done
+-- omega = 1.7e-05
+  iteration # = 8
+ ... Inversion done
+-- omega = 1.8e-05
+  iteration # = 9
+ ... Inversion done
+-- omega = 1.9e-05
+  iteration # = 10
+ ... Inversion done
+-- omega = 1.9e-05
+  iteration # = 8
+ ... Inversion done
+-- omega = 2.0e-05
+  iteration # = 8
+ ... Inversion done
+-- omega = 2.1e-05
+  iteration # = 10
+ ... Inversion done
+-- omega = 2.1e-05
+  iteration # = 8
+ ... Inversion done
+-- omega = 2.2e-05
+  iteration # = 10
+ ... Inversion done
+-- omega = 2.3e-05
+  iteration # = 8
+ ... Inversion done
+-- omega = 2.4e-05
+  iteration # = 10
+ ... Inversion done
+-- omega = 2.4e-05
+  iteration # = 9
+ ... Inversion done
+-- omega = 2.5e-05
+  iteration # = 10
+ ... Inversion done
+-- omega = 2.6e-05
+  iteration # = 10
+ ... Inversion done
+-- omega = 2.7e-05
+  iteration # = 10
+ ... Inversion done
+-- omega = 2.8e-05
+  iteration # = 10
+ ... Inversion done
+-- omega = 2.8e-05
+  iteration # = 10
+ ... Inversion done
+-- omega = 2.9e-05
+  iteration # = 11
+ ... Inversion done
+-- omega = 3.0e-05
+  iteration # = 12
+ ... Inversion done
+-- omega = 3.1e-05
+  iteration # = 10
+ ... Inversion done
+-- omega = 3.2e-05
+  iteration # = 12
+ ... Inversion done
+-- omega = 3.3e-05
+  iteration # = 12
+ ... Inversion done
+-- omega = 3.4e-05
+  iteration # = 12
+ ... Inversion done
+-- omega = 3.5e-05
+  iteration # = 14
+ ... Inversion done
+-- ome

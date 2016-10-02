@@ -15,6 +15,7 @@ __pycache__/
 
 # pycharm file
 .idea/
+#.idea/workspace.xml
 
 # data files
 *.nc
