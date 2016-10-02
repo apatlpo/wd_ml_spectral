@@ -180,13 +180,13 @@ class ml_model():
             def psi(i,j): return Ueddy * Leddy \
                       * np.exp(- (self.grid.get_dist_from_center(i, j) /Leddy)** 2)
         elif analytical_ubar == 2:
-            Leddy = 1.e5  # m
+            #Leddy = 1.e5  # m
             Ueddy = 0.2  # m/s
             #keddy = 2.*np.pi/Leddy
             keddy = 3.*2.*np.pi/self.grid.Lx
-            def psi(i, j): return Ueddy * Leddy \
-                       * np.sin(keddy*float(i)*self.grid.dx) \
-                       * np.sin(keddy*float(j)*self.grid.dy) \
+            def psi(i, j): return Ueddy/keddy \
+                       * np.cos(keddy*float(i)*self.grid.dx) \
+                       * np.cos(keddy*float(j)*self.grid.dy) \
                        * np.sin(j/float(my-1)*np.pi)**4
         else:
             if self._verbose: print 'Background flow is 0'

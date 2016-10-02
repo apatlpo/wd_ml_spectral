@@ -14,6 +14,7 @@ print 'source activate natl60'
 print 'export PYTHONPATH=\"$PYTHONPATH:/home/slyne/aponte/natl60/sio/wd_solver/\";'
 print('python setup.py build_ext --inplace')
 print('mpirun -np 8  python  '+script+'.py -mf -ksp_view -ksp_monitor -ksp_converged_reason -log_view') 
+print('grep -i convergence data/*.log')
 
 # on mac os
 print '\n --- On mac os laptop:'
@@ -24,6 +25,7 @@ print('python2.7 setup.py build_ext --inplace')
 print('cd dev/')
 print('mpirun-openmpi-gcc49 -np 8  python2.7  '+script+'.py  -mf -ksp_view -ksp_monitor -ksp_converged_reason')
 print('mpirun-openmpi-gcc49 -np 8  python2.7  '+script+'.py  -mf')
+print('grep -i convergence data/*.log')
 
 # print 'All done'
 

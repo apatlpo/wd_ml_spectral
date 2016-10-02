@@ -62,7 +62,8 @@ class wdinversion():
         self.ksp.create(PETSc.COMM_WORLD)
         self.ksp.setOperators(self.L)
         # use conjugate gradients
-        #self.ksp.setType('cg')
+        #self.ksp.setType('cg') # this should not be used as it is unclear whether the operator has right properties
+        #self.ksp.setType('bicg')
         self.ksp.setType('gmres')
         self.ksp.setInitialGuessNonzero(True)
         # and incomplete Cholesky for preconditionning
@@ -71,7 +72,7 @@ class wdinversion():
         #self.ksp.getPC().setReusePreconditioner(True)
         # set tolerances
         #self.ksp.setTolerances(rtol=1e-10)
-        #self.ksp.setTolerances(max_it=1000)
+        self.ksp.setTolerances(max_it=100)
         #
         for opt in sys.argv[1:]:
             PETSc.Options().setValue(opt, None)
@@ -104,7 +105,14 @@ class wdinversion():
         # log info or debug
         #
         #print self.ksp.getConvergenceHistory()
-        if self._verbose: print '  iteration # = '+str(self.ksp.getIterationNumber())
+        if self._verbose:
+            print '  iteration # = '+str(self.ksp.getIterationNumber())
+            if self.ksp.getConvergedReason() != 2:
+                print '  Convergence reason = '+str(self.ksp.getConvergedReason())
+            #if self.ksp.getIterationNumber() ==
+            #print '  '+self.ksp.ConvergedReason
+            #print self.ksp.getConvergedReason()
+
         #print str(W.norm())+' / '+str(U.norm())
         #self.ksp.solve(U, self._W)
         # tmp, test:
