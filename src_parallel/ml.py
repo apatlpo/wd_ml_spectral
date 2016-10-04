@@ -15,13 +15,18 @@ from .io import read_nc_petsc
 #from netCDF4 import Dataset
 
 
+# midlatitude scenario
+f0_midlatitude = 2.*2.*np.pi/86400.*np.sin(45.*np.pi/180.)
+beta0_midlatitude = 2.*2.*np.pi/86400.*np.cos(45.*np.pi/180.) /(6371.*1e3)
+
+
 class ml_model():
     """ Wind driven mixed layer object
     """
     
     def __init__(self,
                  hgrid = None,
-                 f0 = 7.e-5, r = 1.e2,
+                 f0 = f0_midlatitude, r = 1.e2,
                  f0_file = None,
                  verbose = 1,
                  ):

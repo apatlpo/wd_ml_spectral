@@ -10,9 +10,15 @@ from netCDF4 import Dataset
 mpl.rcParams['font.size']= 9
 
 # !!! f0 should be read from outputs ...
-f0 = 7.e-5
-f0n = f0/ 2. / np.pi
+f0_midlatitude = 2. * 2. * np.pi / 86400. * np.sin(45. * np.pi / 180.)
+beta0_midlatitude = 2. * 2. * np.pi / 86400. * np.cos(45. * np.pi / 180.) / (6371. * 1e3)
 
+#f0 = 7.e-5
+f0 = f0_midlatitude
+beta0 = beta0_midlatitude
+
+# normalized version for plots
+f0n = f0/ 2. / np.pi
 
 
 """ Load output and plot response function
@@ -157,7 +163,7 @@ if __name__ == "__main__":
         plt.grid()
         plt.tight_layout()
         plt.title('KE')
-        plt.legend(frameon=False)
+        plt.legend(loc=2, frameon=False)
 
         plt.axvline(x=1., color='r', lw=0.1)
 
@@ -185,41 +191,113 @@ if __name__ == "__main__":
         plt.grid()
         plt.tight_layout()
         plt.title('KE')
-        plt.legend(frameon=False)
+        plt.legend(loc=2, frameon=False)
 
         plt.axvline(x = 1., color='r', lw=0.1)
 
         plt.savefig('figs/' + pref + 'ke.pdf')
 
-
-    #
-    # plot the reponse in (omega,k) space
-    #
-    lvls = 20
-    lvls = np.arange(-10.,5.,1.)
-    for lE, lcname in zip(E,cname):
-
+        #
+        # sensitivity to eddies, at omega=f0
+        #
         plt.figure(figsize=(6, 4))
 
-        toplt = lE
-        toplt = np.log10(toplt)
-        plt.contourf(k,omega/f0n,toplt, lvls, cmap=plt.cm.viridis)
-        cbar = plt.colorbar()
-        plt.ylabel('omega/f0 [1]')
-        plt.xlabel('k [cpm]')
-        plt.xscale('log')
-        plt.yscale('log')
-        plt.title('KE [(m/s)^2/cps/cpm], '+lcname)
+        iomega = np.where(omega/f0n > 1.)[0][0]
+        # plt.loglog(omega,ke.reshape((ke.shape[0],ke.shape[1]*ke.shape[2])),color='0.7',lw=0.05)
+        i = 0;
+        lke = ke[i]
+        plt.loglog(k, E[i][iomega,:], '-', color=colors[i], label=cname[i])
 
-        # Coriolis
-        plt.axhline(y=1. , color='r', lw=0.1)
+        for lE, col, lcname in zip(E[3:], colors[3:], cname[3:]):
+            plt.loglog(k, lE[iomega,:], '--', color=col, label=lcname)
+
+        # plt.legend(loc=0, frameon=False, fontsize=6)
+        plt.xlabel('k [cpm]')
+        plt.ylabel('m^2/s^2 /(rad/s)/(rad/m)')
+        plt.ylim((1e-8, 1e4))
+        plt.xlim((1e-6, 1e-4))
+        # plt.axis([0, 4000, 0, 2.5*1e-3])
+        plt.grid()
+        plt.tight_layout()
+        #plt.title('KE')
+        plt.legend(frameon=False)
+
+        #plt.axvline(x=1., color='r', lw=0.1)
+
+        plt.savefig('figs/' + pref + 'ke_f0.pdf')
+
+        #
+        # sensitivity to eddies, at omega=f0+beta0*500km
+        #
+        plt.figure(figsize=(6, 4))
+
+        iomega = np.where(omega / f0n > (f0 + beta0 * 500.e3) / f0)[0][0]
+        # plt.loglog(omega,ke.reshape((ke.shape[0],ke.shape[1]*ke.shape[2])),color='0.7',lw=0.05)
+        i = 0;
+        lke = ke[i]
+        plt.loglog(k, E[i][iomega, :], '-', color=colors[i], label=cname[i])
+
+        for lE, col, lcname in zip(E[3:], colors[3:], cname[3:]):
+            plt.loglog(k, lE[iomega, :], '-', color=col, label=lcname)
+
+        # plt.legend(loc=0, frameon=False, fontsize=6)
+        plt.xlabel('k [cpm]')
+        plt.ylabel('m^2/s^2 /(rad/s)/(cpm)')
+        plt.ylim((1e-8, 1e4))
+        plt.xlim((1e-6, 1e-4))
+        # plt.axis([0, 4000, 0, 2.5*1e-3])
+        plt.grid()
+        plt.tight_layout()
+        # plt.title('KE')
+        plt.legend(frameon=False)
 
         # add dispersion relation for a uniform stratification
-        N=1e-3; H=4.e3;
-        plt.axhline(y=N/f0 , color='r', lw=0.1)
+        N = 1e-3;
+        H = 4.e3;
         for i in xrange(4):
-            c_mode = N*H/(float(i+1)*np.pi)
-            omega_mode = np.sqrt(f0**2 + (2.*np.pi*k)**2*c_mode**2)
-            plt.plot(k,omega_mode/f0, '--', color='r',lw=0.1)
+            c_mode = N * H / (float(i + 1) * np.pi)
+            k_mode = np.sqrt( (f0 + beta0 * 500.e3)**2 - f0**2 )/c_mode /2/np.pi
+            plt.axvline(x=k_mode, color='r', lw=0.1)
 
-        plt.savefig('figs/' + lcname + '_E.pdf')
+        # plt.axvline(x=1., color='r', lw=0.1)
+
+        plt.savefig('figs/' + pref + 'ke_f0off.pdf')
+
+
+
+    if False:
+        #
+        # plot the reponse in (omega,k) space
+        #
+        lvls = 20
+        lvls = np.arange(-10.,5.,1.)
+        for lE, lcname in zip(E,cname):
+
+            plt.figure(figsize=(6, 4))
+
+            toplt = lE
+            toplt = np.log10(toplt)
+            plt.contourf(k,omega/f0n,toplt, lvls, cmap=plt.cm.viridis)
+            cbar = plt.colorbar()
+            plt.ylabel('omega/f0 [1]')
+            plt.xlabel('k [cpm]')
+            plt.xscale('log')
+            plt.yscale('log')
+            plt.title('KE [(m/s)^2/cps/cpm], '+lcname)
+
+            # Coriolis
+            plt.axhline(y=1. , color='r', lw=0.1)
+            plt.axhline(y=(f0+beta0*500.e3)/f0 , color='r', lw=0.1)
+
+            # add dispersion relation for a uniform stratification
+            N=1e-3; H=4.e3;
+            plt.axhline(y=N/f0 , color='r', lw=0.1)
+            for i in xrange(4):
+                c_mode = N*H/(float(i+1)*np.pi)
+                omega_mode = np.sqrt(f0**2 + (2.*np.pi*k)**2*c_mode**2)
+                plt.plot(k,omega_mode/f0, '--', color='r',lw=0.1)
+
+            plt.savefig('figs/' + lcname + '_E.pdf')
+
+
+

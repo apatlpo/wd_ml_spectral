@@ -15,13 +15,18 @@ from .io import read_nc_petsc
 #from netCDF4 import Dataset
 
 
+# midlatitude scenario
+f0_midlatitude = 2.*2.*np.pi/86400.*np.sin(45.*np.pi/180.)
+beta0_midlatitude = 2.*2.*np.pi/86400.*np.cos(45.*np.pi/180.) /(6371.*1e3)
+
+
 class ml_model():
     """ Wind driven mixed layer object
     """
     
     def __init__(self,
                  hgrid = None,
-                 f0 = 7.e-5, r = 1.e2,
+                 f0 = f0_midlatitude, r = 1.e2,
                  f0_file = None,
                  verbose = 1,
                  ):
@@ -185,8 +190,8 @@ class ml_model():
             #keddy = 2.*np.pi/Leddy
             keddy = 3.*2.*np.pi/self.grid.Lx
             def psi(i, j): return Ueddy/keddy \
-                       * np.sin(keddy*float(i)*self.grid.dx) \
-                       * np.sin(keddy*float(j)*self.grid.dy) \
+                       * np.cos(keddy*float(i)*self.grid.dx) \
+                       * np.cos(keddy*float(j)*self.grid.dy) \
                        * np.sin(j/float(my-1)*np.pi)**4
         else:
             if self._verbose: print 'Background flow is 0'

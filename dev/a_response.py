@@ -10,7 +10,14 @@ from netCDF4 import Dataset
 mpl.rcParams['font.size']= 9
 
 # !!! f0 should be read from outputs ...
-f0 = 7.e-5
+f0_midlatitude = 2. * 2. * np.pi / 86400. * np.sin(45. * np.pi / 180.)
+beta0_midlatitude = 2. * 2. * np.pi / 86400. * np.cos(45. * np.pi / 180.) / (6371. * 1e3)
+
+#f0 = 7.e-5
+f0 = f0_midlatitude
+beta0 = beta0_midlatitude
+
+# normalized version for plots
 f0n = f0/ 2. / np.pi
 
 
